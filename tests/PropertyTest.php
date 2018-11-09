@@ -8,8 +8,6 @@ use PHPUnit\Framework\TestCase;
 
 final class PropertyTest extends TestCase
 {
-    use CreatesClient;
-
     /**
      * Test packing property headers.
      *
