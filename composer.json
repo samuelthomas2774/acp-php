@@ -1,0 +1,15 @@
+{
+    "autoload": {
+        "psr-4": {
+            "AirPort\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "AirPort\\Tests\\": "tests/"
+        }
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^7"
+    }
+}
