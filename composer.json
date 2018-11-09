@@ -1,4 +1,13 @@
 {
+    "name": "samuelthomas2774/acp-php",
+    "description": "A PHP implementation of the management protocol of Apple's AirPort devices.",
+    "homepage": "https://gitlab.fancy.org.uk/samuel/acp-php",
+    "authors": [
+        {
+            "name": "Samuel Elliott",
+            "homepage": "https://samuelelliott.ml"
+        }
+    ],
     "autoload": {
         "psr-4": {
             "AirPort\\": "src/"
