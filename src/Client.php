@@ -82,7 +82,7 @@ class Client
 
             if ($flags & 1) {
                 $data = unpack('N', $prop_data);
-                $error_code = $data[0];
+                $error_code = $data[1];
 
                 echo 'Error requesting value for property ' . $name . ': ' . $error_code . "\n";
                 continue;
@@ -130,8 +130,8 @@ class Client
         $prop_data = $this->receive($size);
 
         if ($flags) {
-            $data = unpack('I', $prop_data);
-            $error_code = $data[0];
+            $data = unpack('N', $prop_data);
+            $error_code = $data[1];
 
             echo 'Error setting value for property ' . $name . ' - ' . $error_code . "\n";
         }

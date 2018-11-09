@@ -10,6 +10,67 @@ final class MessageTest extends TestCase
 {
     use CreatesClient;
 
+    public function testPackHeader()
+    {
+        $expected_hex = '61637070000300010000000000000000ffffffff000000040000000000000014000000000000000000000000000000007a5c8b71ad6f324f0cac857d868ab5173e09c835f431657f3c9cb56d969aa507000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000';
+
+        $message = new Message(0x00030001, $flags = 4, 0, 0x14, 0, Message::generateAcpHeaderKey('testing'));
+
+        $packed = Message::packHeader([
+            'magic' => Message::HEADER_MAGIC,
+            'version' => $message->version,
+            'header_checksum' => 0,
+            'body_checksum' => 0,
+            'body_size' => $message->body_size,
+            'flags' => $message->flags,
+            'unused' => $message->unused,
+            'command' => $message->command,
+            'error_code' => $message->error_code,
+            'key' => $message->key,
+        ]);
+
+        $message_hex = bin2hex($packed);
+
+        $this->assertEquals($expected_hex, $message_hex);
+    }
+
+    public function testPackHeaderWithChecksum()
+    {
+        $expected_hex = '6163707000030001214613e500000000ffffffff000000040000000000000014000000000000000000000000000000007a5c8b71ad6f324f0cac857d868ab5173e09c835f431657f3c9cb56d969aa507000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000';
+
+        $message = new Message(0x00030001, $flags = 4, 0, 0x14, 0, Message::generateAcpHeaderKey('testing'));
+
+        $packed = Message::packHeader([
+            'magic' => Message::HEADER_MAGIC,
+            'version' => $message->version,
+            'header_checksum' => 0,
+            'body_checksum' => 0,
+            'body_size' => $message->body_size,
+            'flags' => $message->flags,
+            'unused' => $message->unused,
+            'command' => $message->command,
+            'error_code' => $message->error_code,
+            'key' => $message->key,
+        ]);
+
+        $packed_checksum = Message::packHeader([
+            'magic' => Message::HEADER_MAGIC,
+            'version' => $message->version,
+            'header_checksum' => hexdec(hash('adler32', $packed)),
+            'body_checksum' => 0,
+            'body_size' => $message->body_size,
+            'flags' => $message->flags,
+            'unused' => $message->unused,
+            'command' => $message->command,
+            'error_code' => $message->error_code,
+            'key' => $message->key,
+        ]);
+
+        $message_hex = bin2hex($packed_checksum);
+
+        $this->assertEquals($expected_hex, $message_hex);
+    }
+
     public function testComposeGetPropCommand()
     {
         // Property::composeRawElement(0, new Property('dbug'))
